@@ -1,7 +1,7 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const fields = ['employeeId','expiry','nameEn','nameOm','nameAm','roleEn','roleOm','station','contact'];
+  const fields = ['employeeId','expiry','nameEn','nameOm','nameAm','roleEn','roleOm','roleAm','station','contact'];
   const flag = 'assets/oromia-flag.webp';
   const logo = 'assets/nooruu-logo.jpg';
   let portrait = '';
@@ -13,6 +13,7 @@
 
   function readForm() {
     const card = Object.fromEntries(fields.map(id => [id, $(id).value.trim()]));
+    if (/^\d{1,4}$/.test(card.employeeId)) card.employeeId = card.employeeId.padStart(4, '0');
     card.photo = portrait;
     return card;
   }
@@ -21,37 +22,51 @@
     $('formMessage').style.color = error ? '#b4363a' : '#0d634d';
   }
   function valid(card) {
-    if (!card.employeeId || !card.nameEn || !card.roleEn) {
-      message('Add an employee number, English name and job title.', true);
+    if (!/^\d{4}$/.test(card.employeeId)) {
+      message('Employee number must contain exactly four digits (for example 0002).', true);
+      return false;
+    }
+    if (!card.nameEn || !card.nameOm || !card.nameAm || !card.roleEn || !card.roleOm || !card.roleAm) {
+      message('Add names and job titles in English, Afaan Oromo and Amharic.', true);
       return false;
     }
     return true;
   }
   function front(card) {
-    const secondary = [card.nameOm, card.nameAm].filter(Boolean).map(v => `<span class="card-alt-name">${escape(v)}</span>`).join('');
     return `<article class="id-card card-front" aria-label="Front of employee ID card">
       <div class="card-stripe"><i></i><i></i><i></i></div>
       <div class="card-body">
-        <div class="card-top"><div class="card-company"><img src="${logo}" alt=""><div><b>NOORUU</b><small>EMPLOYEE IDENTIFICATION</small></div></div><div class="card-flag"><span>OROMIA<br>REGION</span><img src="${flag}" alt="Oromia flag"></div></div>
+        <div class="card-top"><div class="card-company"><img src="${logo}" alt=""><div><b>NOORUU</b><small>OFFICIAL TICKETING PARTNER TO<br>OROMIA TRANSPORT BUREAU</small></div></div><div class="card-flag"><span>OROMIA<br>REGION</span><img src="${flag}" alt="Oromia flag"></div></div>
         <div class="card-mid"><div class="portrait">${card.photo ? `<img src="${escape(card.photo)}" alt="Employee portrait">` : '<div class="portrait-placeholder">PHOTO</div>'}</div>
-          <div class="card-fields"><div class="card-field-block"><span class="card-label">Maqaa / Full name</span><strong class="card-name">${display(card.nameEn)}</strong>${secondary}</div>
-          <div class="card-field-block"><span class="card-label">Gahee hojii / Job title</span><strong class="card-role">${display(card.roleEn)}</strong>${card.roleOm ? `<span class="card-small">${escape(card.roleOm)}</span>` : ''}</div>
-          <div><span class="card-label">Bakka hojii / Station</span><span class="card-small">${display(card.station)}</span></div></div></div>
-        <div class="card-bottom"><div><span class="card-label">Employee no.</span><strong class="card-id">${display(card.employeeId)}</strong></div><div class="card-valid"><span class="card-label">Valid until</span>${dateLabel(card.expiry)}</div></div>
+          <div class="card-fields"><div class="card-field-block"><span class="card-label">Maqaa / ስም / Name</span><strong class="card-name fit-line">${display(card.nameEn)}</strong><span class="card-alt-name fit-line">${display(card.nameOm)}</span><span class="card-alt-name fit-line">${display(card.nameAm)}</span></div>
+          <div class="card-field-block"><span class="card-label">Gahee hojii / የሥራ መደብ / Role</span><strong class="card-role fit-line">${display(card.roleEn)}</strong><span class="card-small fit-line">${display(card.roleOm)}</span><span class="card-small fit-line">${display(card.roleAm)}</span></div></div></div>
+        <div class="card-bottom"><div class="card-id"><span>EMPLOYEE NO.</span><b>${display(card.employeeId)}</b></div><div class="card-valid"><span>VALID UNTIL</span><b>${dateLabel(card.expiry)}</b></div></div>
       </div></article>`;
   }
   function back(card) {
     return `<article class="id-card card-back" aria-label="Reverse of employee ID card">
       <div class="card-stripe"><i></i><i></i><i></i></div><div class="card-body">
         <div class="back-head"><img src="${logo}" alt=""><div><b>NOORUU</b><span>Employee ID · Waraqaa eenyummaa hojjetaa</span></div></div>
-        <div class="back-copy"><strong>This card identifies a Nooruu employee.</strong> It remains the property of Nooruu. If found, please contact the office shown below.<br><br><strong>Kaardiin kun hojjetaa Nooruu adda baasa.</strong> Yoo argattan, maaloo lakkoofsa armaan gadiitiin nu qunnamaa.</div>
+        <div class="back-copy"><p><strong>English</strong> · This identifies a Nooruu employee. If found, please contact the office below.</p><p><strong>Afaan Oromo</strong> · Kaardiin kun hojjetaa Nooruu adda baasa. Yoo argattan, nu qunnamaa.</p><p><strong>አማርኛ</strong> · ይህ ካርድ የኖሩ ሠራተኛን ይለያል። ካገኙት እባክዎ ከታች ባለው ስልክ ያግኙን።</p></div>
         <div class="back-details"><div><span class="card-label">Employee number</span><b>${display(card.employeeId)}</b></div><div><span class="card-label">Office / emergency contact</span><b>${display(card.contact)}</b></div></div>
-        <div class="back-foot">NOORUU · STAFF IDENTIFICATION · OROMIA, ETHIOPIA</div>
+        <div class="back-foot">${card.station ? `STATION: ${escape(card.station)} · ` : ''}NOORUU · OROMIA, ETHIOPIA</div>
       </div></article>`;
   }
   function renderPreview() {
     const card = readForm();
     $('previewCards').innerHTML = front(card) + back(card);
+    fitCardText($('previewCards'));
+  }
+  function fitCardText(root) {
+    root.querySelectorAll('.fit-line').forEach(el => {
+      el.style.fontSize = '';
+      let size = parseFloat(getComputedStyle(el).fontSize);
+      while (el.scrollWidth > el.clientWidth + 1 && size > 6.2) {
+        size -= .35;
+        el.style.fontSize = `${size}px`;
+      }
+      el.dataset.overflow = el.scrollWidth > el.clientWidth + 1 ? 'true' : 'false';
+    });
   }
   function renderBatch() {
     $('batchCount').textContent = batch.length;
@@ -80,6 +95,11 @@
       pages.push(sheet(group, 'front'), sheet(group, 'back'));
     }
     $('printRoot').innerHTML = pages.join('');
+    fitCardText($('printRoot'));
+    if ($('printRoot').querySelector('[data-overflow="true"]')) {
+      message('One or more card lines are too long. Shorten the text before printing.', true);
+      return false;
+    }
     return true;
   }
   function print(mode) {
@@ -96,12 +116,13 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   function cleanImported(card) {
-    if (!card || typeof card !== 'object' || !card.employeeId || !card.nameEn || !card.roleEn) throw Error('Each employee needs a number, English name and job title.');
+    if (!card || typeof card !== 'object' || !/^\d{4}$/.test(String(card.employeeId || '')) || !card.nameEn || !card.nameOm || !card.nameAm || !card.roleEn || !card.roleOm || !card.roleAm) throw Error('Each employee needs a four-digit number and all three names and job titles.');
     const clean = Object.fromEntries(fields.map(key => [key, String(card[key] ?? '').slice(0, 100)]));
     clean.photo = typeof card.photo === 'string' && /^data:image\/(png|jpeg|webp);base64,/.test(card.photo) ? card.photo : '';
     return clean;
   }
   fields.forEach(id => $(id).addEventListener('input', renderPreview));
+  $('employeeId').addEventListener('blur', () => { const value = $('employeeId').value.trim(); if (/^\d{1,4}$/.test(value)) { $('employeeId').value = value.padStart(4, '0'); renderPreview(); } });
   $('photo').addEventListener('change', event => {
     const file = event.target.files[0];
     if (!file) return;

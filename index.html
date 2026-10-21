@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Nooruu · Employee ID Studio</title>
+  <link rel="icon" href="assets/nooruu-logo.jpg" type="image/jpeg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand"><img src="assets/nooruu-logo.jpg" alt="Nooruu logo"><div><strong>NOORUU</strong><span>Employee ID Studio</span></div></div>
+      <div class="header-actions">
+        <span class="local-pill">Private in your browser</span>
+        <button type="button" class="button button-light" id="importButton">Import data</button>
+        <button type="button" class="button button-light" id="exportButton">Export data</button>
+        <button type="button" class="button button-dark" id="printButton">Print / Save PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="intro">
+      <div><p class="eyebrow">NOORUU · OTA TICKETING TEAM</p><h1>Employee ID cards</h1><p>Enter employee details, upload a portrait, and print a clean CR80 card or an A4 batch. The supplied Nooruu logo and Oromia flag are built in.</p></div>
+      <div class="intro-mark"><span>85.6 × 54 mm</span><small>Standard card size</small></div>
+    </section>
+
+    <div class="layout">
+      <section class="panel editor" aria-labelledby="detailsHeading">
+        <div class="panel-head"><div><p class="step">01 / CARD DETAILS</p><h2 id="detailsHeading">Employee information</h2></div><button type="button" class="text-button" id="newButton">New card</button></div>
+        <div class="field-grid">
+          <label class="field"><span>Employee number <em>*</em></span><input id="employeeId" maxlength="24" placeholder="NR-OTA-0001" autocomplete="off" required></label>
+          <label class="field"><span>Valid until</span><input id="expiry" type="date"></label>
+          <label class="field full"><span>Full name · English <em>*</em></span><input id="nameEn" maxlength="60" placeholder="Employee full name" autocomplete="off" required></label>
+          <label class="field"><span>Maqaa · Afaan Oromo</span><input id="nameOm" maxlength="60" placeholder="Maqaa guutuu" autocomplete="off"></label>
+          <label class="field"><span>ስም · Amharic</span><input id="nameAm" maxlength="60" placeholder="የሰራተኛው ስም" autocomplete="off"></label>
+          <label class="field"><span>Job title · English <em>*</em></span><input id="roleEn" maxlength="45" placeholder="Ticketing officer" autocomplete="off" required></label>
+          <label class="field"><span>Gahee hojii · Afaan Oromo</span><input id="roleOm" maxlength="45" placeholder="Ogeessa tikeetii" autocomplete="off"></label>
+          <label class="field"><span>Station / location</span><input id="station" maxlength="45" placeholder="Adama Terminal" autocomplete="off"></label>
+          <label class="field"><span>Contact on reverse</span><input id="contact" maxlength="45" placeholder="Office or emergency phone" autocomplete="off"></label>
+          <label class="field full upload-field"><span>Employee portrait</span><input type="file" id="photo" accept="image/png,image/jpeg,image/webp"><small>Portrait stays on this device. A centered head and shoulders photo prints best.</small></label>
+        </div>
+        <div class="editor-actions"><button type="button" class="button button-primary" id="addButton">Add employee to batch</button><span id="formMessage" role="status"></span></div>
+      </section>
+
+      <section class="preview-area" aria-labelledby="previewHeading">
+        <div class="preview-heading"><div><p class="step">02 / LIVE PREVIEW</p><h2 id="previewHeading">Front & reverse</h2></div><span class="preview-tag">PRINT AT 100% SCALE</span></div>
+        <div class="preview-cards" id="previewCards"></div>
+        <div class="note"><strong>Designed for Nooruu staff identification.</strong> The layout borrows the clear hierarchy of modern identity cards; it does not create or verify a MOSIP or government ID.</div>
+      </section>
+    </div>
+
+    <section class="panel batch-panel" aria-labelledby="batchHeading">
+      <div class="panel-head"><div><p class="step">03 / PRINT QUEUE</p><h2 id="batchHeading">Employees <span id="batchCount">0</span></h2><p class="subtle">A4 printing places eight fronts on each sheet, followed by their matching backs.</p></div><div class="batch-actions"><button type="button" class="button button-light" id="clearButton">Clear batch</button><button type="button" class="button button-dark" id="printBatchButton">Print batch / PDF</button></div></div>
+      <div id="batchList" class="batch-list"></div>
+    </section>
+    <footer>Made for local, browser based card production. No account or server upload is required.</footer>
+  </main>
+
+  <input id="importFile" type="file" accept="application/json,.json" hidden>
+  <div id="printRoot" aria-hidden="true"></div>
+  <script src="app.js"></script>
+</body>
+</html>

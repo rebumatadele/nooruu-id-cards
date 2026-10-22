@@ -16,14 +16,14 @@
         <span class="local-pill">Private in your browser</span>
         <button type="button" class="button button-light" id="importButton">Import data</button>
         <button type="button" class="button button-light" id="exportButton">Export data</button>
-        <button type="button" class="button button-dark" id="printButton">Print / Save PDF</button>
+        <button type="button" class="button button-dark" id="printButton">Review A4 preview</button>
       </div>
     </div>
   </header>
 
   <main class="workspace">
     <section class="intro">
-      <div><p class="eyebrow">NOORUU · OTA TICKETING TEAM</p><h1>Employee ID cards</h1><p>Enter employee details, upload a portrait, and print a clean CR80 card or an A4 batch. The supplied Nooruu logo and Oromia flag are built in.</p></div>
+      <div><p class="eyebrow">NOORUU · OTA TICKETING TEAM</p><h1>Employee ID cards</h1><p>Enter employee details, upload a portrait, then review the A4 layout below before printing or saving a PDF.</p></div>
       <div class="intro-mark"><span>85.6 × 54 mm</span><small>Standard card size</small></div>
     </section>
 
@@ -40,7 +40,8 @@
           <label class="field"><span>Gahee hojii · Afaan Oromo <em>*</em></span><input id="roleOm" maxlength="45" placeholder="Ogeessa tikeetii" autocomplete="off" required></label>
           <label class="field"><span>የሥራ መደብ · Amharic <em>*</em></span><input id="roleAm" maxlength="45" placeholder="የትኬት ሰራተኛ" autocomplete="off" required></label>
           <label class="field"><span>Station / location</span><input id="station" maxlength="45" placeholder="Adama Terminal" autocomplete="off"></label>
-          <label class="field"><span>Contact on reverse</span><input id="contact" maxlength="45" placeholder="Office or emergency phone" autocomplete="off"></label>
+          <label class="field"><span>Employee phone number</span><input id="employeePhone" type="tel" maxlength="25" placeholder="0953682497" autocomplete="off"></label>
+          <label class="field"><span>Office / emergency phone</span><input id="contact" type="tel" maxlength="25" placeholder="Office or emergency phone" autocomplete="off"></label>
           <label class="field full upload-field"><span>Employee portrait</span><input type="file" id="photo" accept="image/png,image/jpeg,image/webp"><small>Portrait stays on this device. A centered head and shoulders photo prints best.</small></label>
         </div>
         <div class="editor-actions"><button type="button" class="button button-primary" id="addButton">Add employee to batch</button><span id="formMessage" role="status"></span></div>
@@ -54,8 +55,15 @@
     </div>
 
     <section class="panel batch-panel" aria-labelledby="batchHeading">
-      <div class="panel-head"><div><p class="step">03 / PRINT QUEUE</p><h2 id="batchHeading">Employees <span id="batchCount">0</span></h2><p class="subtle">A4 printing places eight fronts on each sheet, followed by their matching backs.</p></div><div class="batch-actions"><button type="button" class="button button-light" id="clearButton">Clear batch</button><button type="button" class="button button-dark" id="printBatchButton">Print batch / PDF</button></div></div>
+      <div class="panel-head"><div><p class="step">03 / PRINT QUEUE</p><h2 id="batchHeading">Employees <span id="batchCount">0</span></h2><p class="subtle">Eight cards per A4 sheet. Each front sheet is followed by its matching reverse.</p></div><div class="batch-actions"><button type="button" class="button button-light" id="clearButton">Clear batch</button><button type="button" class="button button-dark" id="printBatchButton">Review batch A4</button></div></div>
       <div id="batchList" class="batch-list"></div>
+    </section>
+    <section class="panel sheet-panel" aria-labelledby="sheetHeading" id="sheetSection">
+      <div class="panel-head"><div><p class="step">04 / BEFORE YOU PRINT</p><h2 id="sheetHeading">A4 print preview</h2><p class="subtle">Same card positions and dimensions as the PDF print layout. Review fronts and backs here first.</p></div><button type="button" class="button button-primary" id="previewPrintButton">Print / Save PDF</button></div>
+      <div class="sheet-controls"><div class="sheet-mode" role="group" aria-label="Preview selection"><button type="button" id="previewCurrent" class="active" aria-pressed="true">Current card</button><button type="button" id="previewBatch" aria-pressed="false">Batch</button></div><span id="sheetStatus" role="status"></span></div>
+      <div class="sheet-facts"><span><b>8 cards</b> per A4 sheet</span><span><b>2 × 4</b> layout</span><span><b>10 mm</b> cutting gaps</span><span><b>85.6 × 53.98 mm</b> each card</span></div>
+      <div id="sheetPreview" class="sheet-preview" aria-label="A4 front and reverse sheet preview"></div>
+      <p class="print-tip">In the print dialog, choose A4, actual size or 100%, background graphics on, and no browser headers or footers. The browser lets you review pages before saving the PDF.</p>
     </section>
     <footer>Made for local, browser based card production. No account or server upload is required.</footer>
   </main>

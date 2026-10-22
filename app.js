@@ -1,12 +1,13 @@
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
-  const fields = ['employeeId','expiry','nameEn','nameOm','nameAm','roleEn','roleOm','roleAm','station','contact'];
+  const fields = ['employeeId','expiry','nameEn','nameOm','nameAm','roleEn','roleOm','roleAm','station','employeePhone','contact'];
   const flag = 'assets/oromia-flag.webp';
   const logo = 'assets/nooruu-logo.jpg';
   let portrait = '';
   let batch = [];
   let printMode = 'single';
+  let previewMode = 'single';
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const display = value => escape(value || '—');
   const dateLabel = value => value ? new Date(`${value}T12:00:00`).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}) : '—';
@@ -36,26 +37,26 @@
     return `<article class="id-card card-front" aria-label="Front of employee ID card">
       <div class="card-stripe"><i></i><i></i><i></i></div>
       <div class="card-body">
-        <div class="card-top"><div class="card-company"><img src="${logo}" alt=""><div><b>NOORUU</b><small>OFFICIAL TICKETING PARTNER TO<br>OROMIA TRANSPORT BUREAU</small></div></div><div class="card-flag"><span>OROMIA<br>REGION</span><img src="${flag}" alt="Oromia flag"></div></div>
+        <div class="card-top"><div class="card-company"><img src="${logo}" alt=""><div><b>NOORUU</b><small>OFFICIAL TICKETING PARTNER TO<br>OROMIA TRANSPORT BUREAU</small></div></div><div class="card-flag"><span>NAANNOO<br>OROMIYAA</span><img src="${flag}" alt="Oromia flag"></div></div>
         <div class="card-mid"><div class="portrait">${card.photo ? `<img src="${escape(card.photo)}" alt="Employee portrait">` : '<div class="portrait-placeholder">PHOTO</div>'}</div>
-          <div class="card-fields"><div class="card-field-block"><span class="card-label">Maqaa / ስም / Name</span><strong class="card-name fit-line">${display(card.nameEn)}</strong><span class="card-alt-name fit-line">${display(card.nameOm)}</span><span class="card-alt-name fit-line">${display(card.nameAm)}</span></div>
-          <div class="card-field-block"><span class="card-label">Gahee hojii / የሥራ መደብ / Role</span><strong class="card-role fit-line">${display(card.roleEn)}</strong><span class="card-small fit-line">${display(card.roleOm)}</span><span class="card-small fit-line">${display(card.roleAm)}</span></div></div></div>
-        <div class="card-bottom"><div class="card-id"><span>EMPLOYEE NO.</span><b>${display(card.employeeId)}</b></div><div class="card-valid"><span>VALID UNTIL</span><b>${dateLabel(card.expiry)}</b></div></div>
+          <div class="card-fields"><div class="card-field-block"><span class="card-label">FULL NAME</span><strong class="card-name fit-line">${display(card.nameEn)}</strong><span class="card-alt-name fit-line">${display(card.nameOm)}</span><span class="card-alt-name fit-line">${display(card.nameAm)}</span></div>
+          <div class="card-field-block"><span class="card-label">JOB TITLE</span><strong class="card-role fit-line">${display(card.roleEn)}</strong><span class="card-small fit-line">${display(card.roleOm)}</span><span class="card-small fit-line">${display(card.roleAm)}</span></div></div></div>
+        <div class="card-bottom"><div class="card-id"><span>EMPLOYEE NO.</span><b>${display(card.employeeId)}</b></div>${card.expiry ? `<div class="card-valid"><span>VALID UNTIL</span><b>${dateLabel(card.expiry)}</b></div>` : ''}</div>
       </div></article>`;
   }
   function back(card) {
     return `<article class="id-card card-back" aria-label="Reverse of employee ID card">
       <div class="card-stripe"><i></i><i></i><i></i></div><div class="card-body">
-        <div class="back-head"><img src="${logo}" alt=""><div><b>NOORUU</b><span>Employee ID · Waraqaa eenyummaa hojjetaa</span></div></div>
+        <div class="back-head"><img src="${logo}" alt=""><div><b>NOORUU</b><span>Waraqaa eenyummaa hojjetaa · ${display(card.employeeId)}</span></div></div>
         <div class="back-copy"><p><strong>English</strong> · This identifies a Nooruu employee. If found, please contact the office below.</p><p><strong>Afaan Oromo</strong> · Kaardiin kun hojjetaa Nooruu adda baasa. Yoo argattan, nu qunnamaa.</p><p><strong>አማርኛ</strong> · ይህ ካርድ የኖሩ ሠራተኛን ይለያል። ካገኙት እባክዎ ከታች ባለው ስልክ ያግኙን።</p></div>
-        <div class="back-details"><div><span class="card-label">Employee number</span><b>${display(card.employeeId)}</b></div><div><span class="card-label">Office / emergency contact</span><b>${display(card.contact)}</b></div></div>
-        <div class="back-foot">${card.station ? `STATION: ${escape(card.station)} · ` : ''}NOORUU · OROMIA, ETHIOPIA</div>
+        <div class="back-details"><div><span class="card-label">Employee phone</span><b class="fit-line">${display(card.employeePhone)}</b></div><div><span class="card-label">Office / emergency contact</span><b class="fit-line">${display(card.contact)}</b></div><div class="back-station"><span class="card-label">Bakka hojii / የሥራ ቦታ / Station</span><b>${display(card.station)}</b></div></div>
       </div></article>`;
   }
   function renderPreview() {
     const card = readForm();
     $('previewCards').innerHTML = front(card) + back(card);
     fitCardText($('previewCards'));
+    renderSheetPreview();
   }
   function fitCardText(root) {
     root.querySelectorAll('.fit-line').forEach(el => {
@@ -75,9 +76,48 @@
       batch.splice(Number(button.dataset.remove), 1);
       renderBatch();
     }));
+    if (!batch.length && previewMode === 'batch') previewMode = 'single';
+    renderSheetPreview();
   }
   function sheet(cards, side) {
     return `<section class="print-page">${cards.map(card => side === 'front' ? front(card) : back(card)).join('')}<span class="print-label">NOORUU · ${side.toUpperCase()} · Print at actual size (100%)</span></section>`;
+  }
+  function layoutSheetPreview() {
+    const width = 210 * 96 / 25.4;
+    const height = 297 * 96 / 25.4;
+    const scale = Math.min(.88, Math.max(.32, ($('sheetPreview').clientWidth - 10) / width));
+    $('sheetPreview').querySelectorAll('.sheet-stage').forEach(stage => {
+      stage.style.width = `${width * scale}px`;
+      stage.style.height = `${height * scale}px`;
+      stage.querySelector('.print-page').style.transform = `scale(${scale})`;
+    });
+  }
+  function renderSheetPreview() {
+    const useBatch = previewMode === 'batch' && batch.length;
+    const cards = useBatch ? batch : [readForm()];
+    const pages = [];
+    for (let i = 0; i < cards.length; i += 8) {
+      const group = cards.slice(i, i + 8);
+      const number = Math.floor(i / 8) + 1;
+      pages.push(`<div class="sheet-item"><div class="sheet-caption">Sheet ${number} · Front</div><div class="sheet-stage">${sheet(group, 'front')}</div></div>`);
+      pages.push(`<div class="sheet-item"><div class="sheet-caption">Sheet ${number} · Reverse</div><div class="sheet-stage">${sheet(group, 'back')}</div></div>`);
+    }
+    $('sheetPreview').innerHTML = pages.join('');
+    $('previewCurrent').classList.toggle('active', !useBatch);
+    $('previewBatch').classList.toggle('active', !!useBatch);
+    $('previewCurrent').setAttribute('aria-pressed', String(!useBatch));
+    $('previewBatch').setAttribute('aria-pressed', String(!!useBatch));
+    $('previewBatch').disabled = !batch.length;
+    const frontSheets = Math.ceil(cards.length / 8);
+    $('sheetStatus').textContent = `${cards.length} ${cards.length === 1 ? 'card' : 'cards'} · ${frontSheets} front + ${frontSheets} reverse · ${frontSheets * 2} A4 pages total`;
+    fitCardText($('sheetPreview'));
+    layoutSheetPreview();
+  }
+  function setPreviewMode(mode) {
+    if (mode === 'batch' && !batch.length) return;
+    previewMode = mode;
+    renderSheetPreview();
+    $('sheetSection').scrollIntoView({behavior:'smooth',block:'start'});
   }
   function makePrint() {
     let cards;
@@ -94,9 +134,12 @@
       const group = cards.slice(i, i + 8);
       pages.push(sheet(group, 'front'), sheet(group, 'back'));
     }
-    $('printRoot').innerHTML = pages.join('');
-    fitCardText($('printRoot'));
-    if ($('printRoot').querySelector('[data-overflow="true"]')) {
+    const root = $('printRoot');
+    root.innerHTML = pages.join('');
+    root.style.cssText = 'display:block;position:absolute;left:-20000px;visibility:hidden';
+    fitCardText(root);
+    root.removeAttribute('style');
+    if (root.querySelector('[data-overflow="true"]')) {
       message('One or more card lines are too long. Shorten the text before printing.', true);
       return false;
     }
@@ -106,7 +149,7 @@
     printMode = mode;
     if (makePrint()) {
       const images = [...$('printRoot').querySelectorAll('img')];
-      Promise.all(images.map(img => img.complete ? Promise.resolve() : new Promise(resolve => { img.onload = resolve; img.onerror = resolve; }))).then(() => window.print());
+      Promise.all(images.map(img => img.decode().catch(() => undefined))).then(() => window.print());
     }
   }
   function download(name, content) {
@@ -127,9 +170,21 @@
     const file = event.target.files[0];
     if (!file) return;
     if (!['image/png','image/jpeg','image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) { message('Choose a PNG, JPG or WebP under 5 MB.', true); event.target.value = ''; return; }
-    const reader = new FileReader();
-    reader.onload = () => { portrait = String(reader.result); renderPreview(); message('Portrait loaded.'); };
-    reader.readAsDataURL(file);
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+    image.onload = () => {
+      const scale = Math.min(1, 800 / Math.max(image.naturalWidth, image.naturalHeight));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+      canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+      canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+      portrait = canvas.toDataURL('image/jpeg', .86);
+      URL.revokeObjectURL(url);
+      renderPreview();
+      message('Portrait loaded.');
+    };
+    image.onerror = () => { URL.revokeObjectURL(url); message('Could not read the portrait.', true); };
+    image.src = url;
   });
   $('addButton').addEventListener('click', () => {
     const card = readForm();
@@ -139,8 +194,12 @@
   });
   $('newButton').addEventListener('click', () => { fields.forEach(id => $(id).value = ''); $('photo').value = ''; portrait = ''; renderPreview(); message('Ready for a new employee.'); $('employeeId').focus(); });
   $('clearButton').addEventListener('click', () => { if (batch.length && !confirm('Clear the entire batch?')) return; batch = []; renderBatch(); message('Batch cleared.'); });
-  $('printButton').addEventListener('click', () => print('single'));
-  $('printBatchButton').addEventListener('click', () => print('batch'));
+  $('printButton').addEventListener('click', () => setPreviewMode('single'));
+  $('printBatchButton').addEventListener('click', () => setPreviewMode('batch'));
+  $('previewPrintButton').addEventListener('click', () => print(previewMode));
+  $('previewCurrent').addEventListener('click', () => setPreviewMode('single'));
+  $('previewBatch').addEventListener('click', () => setPreviewMode('batch'));
+  window.addEventListener('resize', layoutSheetPreview);
   $('exportButton').addEventListener('click', () => { if (!batch.length) { message('Add employees to the batch before exporting.', true); return; } download('nooruu-employees.json', JSON.stringify({format:'nooruu-employee-cards',version:1,employees:batch},null,2)); message('Batch data exported. Keep this file private.'); });
   $('importButton').addEventListener('click', () => $('importFile').click());
   $('importFile').addEventListener('change', async event => {
@@ -157,4 +216,5 @@
     event.target.value = '';
   });
   renderPreview(); renderBatch();
+  document.fonts.ready.then(() => { fitCardText($('previewCards')); renderSheetPreview(); });
 })();

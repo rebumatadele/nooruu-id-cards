@@ -129,7 +129,7 @@
     return `<article class="id-card card-front" aria-label="Front of employee ID card">
       <div class="card-stripe"><i></i><i></i><i></i></div>
       <div class="card-body">
-        <div class="card-top"><div class="card-company"><img src="${logo}" alt=""><div><b>NOORUU</b><small>OFFICIAL TICKETING PARTNER TO<br>OROMIA TRANSPORT BUREAU</small></div></div><div class="card-flag"><span>NAANNOO<br>OROMIYAA</span><img src="${flag}" alt="Oromia flag"></div></div>
+        <div class="card-top"><div class="card-company"><img src="${logo}" alt=""><div><b>NOORUU</b><small lang="om">MICHUU RASMII GURGURTAA TIKEETII<br>BIIROO GEEJJIBAA OROMIYAA</small></div></div><div class="card-flag"><span>NAANNOO<br>OROMIYAA</span><img src="${flag}" alt="Oromia flag"></div></div>
         <div class="card-mid"><div class="portrait">${card.photo ? `<img src="${escape(card.photo)}" alt="Employee portrait">` : '<div class="portrait-placeholder">PHOTO</div>'}</div>
           <div class="card-fields"><img class="transport-watermark" src="${transportLogo}" alt="Oromia Transport Agency logo"><div class="card-field-block"><span class="card-label">FULL NAME</span><strong class="card-name fit-line">${display(card.nameEn)}</strong><span class="card-alt-name fit-line">${display(card.nameOm)}</span><span class="card-alt-name fit-line">${display(card.nameAm)}</span></div>
           <div class="card-field-block"><span class="card-label">JOB TITLE</span><strong class="card-role fit-line">${display(card.roleEn)}</strong><span class="card-small fit-line">${display(card.roleOm)}</span><span class="card-small fit-line">${display(card.roleAm)}</span></div></div></div>

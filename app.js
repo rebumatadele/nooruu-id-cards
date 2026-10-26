@@ -4,6 +4,7 @@
   const fields = ['employeeId','expiry','nameEn','nameOm','nameAm','roleEn','roleOm','roleAm','station','employeePhone','contact'];
   const flag = 'assets/oromia-flag.webp';
   const logo = 'assets/nooruu-logo.jpg';
+  const seal = 'assets/nooruu-seal.jpg';
   let portrait = '';
   let batch = [];
   let printMode = 'single';
@@ -49,6 +50,7 @@
       <div class="card-stripe"><i></i><i></i><i></i></div><div class="card-body">
         <div class="back-head"><img src="${logo}" alt=""><div><b>NOORUU</b><span>Waraqaa eenyummaa hojjetaa · ${display(card.employeeId)}</span></div></div>
         <div class="back-copy"><p><strong>English</strong> · This identifies a Nooruu employee. If found, please contact the office below.</p><p><strong>Afaan Oromo</strong> · Kaardiin kun hojjetaa Nooruu adda baasa. Yoo argattan, nu qunnamaa.</p><p><strong>አማርኛ</strong> · ይህ ካርድ የኖሩ ሠራተኛን ይለያል። ካገኙት እባክዎ ከታች ባለው ስልክ ያግኙን።</p></div>
+        <img class="company-seal" src="${seal}" alt="Nooruu company seal">
         <div class="back-details"><div><span class="card-label">Employee phone</span><b class="fit-line">${display(card.employeePhone)}</b></div><div><span class="card-label">Office / emergency contact</span><b class="fit-line">${display(card.contact)}</b></div><div class="back-station"><span class="card-label">Bakka hojii / የሥራ ቦታ / Station</span><b>${display(card.station)}</b></div></div>
       </div></article>`;
   }

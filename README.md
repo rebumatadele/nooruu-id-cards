@@ -1,6 +1,6 @@
 # Nooruu Employee ID Studio
 
-A static, browser based generator for Nooruu employee cards. It uses the supplied Nooruu logo and Oromia flag. The card has CR80 dimensions (85.6 × 53.98 mm), and print sheets use A4.
+A static, browser based generator for Nooruu employee cards. It uses the supplied Nooruu logo, company seal, and Oromia flag, with a black, white, and red top accent. The card has CR80 dimensions (85.6 × 53.98 mm), and print sheets use A4.
 
 ## Use
 

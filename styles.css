@@ -6,6 +6,8 @@
 .fit-line{display:block;width:100%;white-space:nowrap;overflow:hidden;text-overflow:clip}.back-copy{font-size:6pt;margin-top:2.5mm;line-height:1.2}.back-copy p{margin:0 0 1.5mm}
 .card-bottom{align-items:center;min-height:5.4mm;padding-top:.6mm}.card-id,.card-valid{display:flex;align-items:baseline;gap:1.5mm;font-size:7pt;line-height:1.1}.card-id span,.card-valid span{font-size:4.3pt;letter-spacing:.05em;color:#718782;font-weight:800}.card-id b,.card-valid b{font-size:7.5pt;color:#182b35}.card-valid{text-align:right}.card-mid{min-height:0}
 .portrait{height:27mm}.back-foot{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Follow the scanned seal's outer rim and hide paper corners and stray ink. */
+.company-seal{clip-path:ellipse(47% 46.7% at 49.7% 50.2%)}
 .card-fields{position:relative;isolation:isolate}.transport-watermark{position:absolute;right:1mm;top:50%;transform:translateY(-50%);width:25mm;height:25mm;object-fit:contain;opacity:.5;z-index:-1;pointer-events:none}.card-fields .card-field-block{position:relative}
 .card-company small{font-size:4.25pt;line-height:1.15;letter-spacing:.01em;font-weight:800;color:#516e64}
 .id-card:before{background:none}.card-stripe{height:1mm;background:#fff}.card-stripe i{display:block}.card-stripe i:nth-child(1){background:#111}.card-stripe i:nth-child(2){background:#fff}.card-stripe i:nth-child(3){background:#db191e}.card-body{height:calc(100% - 1mm)}.card-back{background:#fff}.card-flag span{font-size:4.15pt}.card-label{color:#698079}.card-field-block{margin-bottom:2mm}

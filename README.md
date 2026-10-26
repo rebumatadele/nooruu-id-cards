@@ -14,3 +14,5 @@ A static, browser based generator for Nooruu employee cards. It uses the supplie
 Data and portraits remain in the browser. Export JSON to keep a batch for later; the application does not store it on a server or automatically retain it after the page closes. Treat exported JSON and PDFs as sensitive employee records.
 
 This is Nooruu staff identification. It does not issue or validate MOSIP identifiers or government identity documents.
+
+The front watermark uses the Oromia Transport Agency logo from its official website: https://admin.ota.gov.et/logo.png (retrieved 26 October 2026). The original logo is included locally for reliable printing.

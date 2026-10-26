@@ -5,6 +5,7 @@
   const flag = 'assets/oromia-flag.webp';
   const logo = 'assets/nooruu-logo.jpg';
   const seal = 'assets/nooruu-seal.jpg';
+  const transportLogo = 'assets/oromia-transport-logo.png';
   let portrait = '';
   let batch = [];
   let printMode = 'single';
@@ -40,7 +41,7 @@
       <div class="card-body">
         <div class="card-top"><div class="card-company"><img src="${logo}" alt=""><div><b>NOORUU</b><small>OFFICIAL TICKETING PARTNER TO<br>OROMIA TRANSPORT BUREAU</small></div></div><div class="card-flag"><span>NAANNOO<br>OROMIYAA</span><img src="${flag}" alt="Oromia flag"></div></div>
         <div class="card-mid"><div class="portrait">${card.photo ? `<img src="${escape(card.photo)}" alt="Employee portrait">` : '<div class="portrait-placeholder">PHOTO</div>'}</div>
-          <div class="card-fields"><div class="card-field-block"><span class="card-label">FULL NAME</span><strong class="card-name fit-line">${display(card.nameEn)}</strong><span class="card-alt-name fit-line">${display(card.nameOm)}</span><span class="card-alt-name fit-line">${display(card.nameAm)}</span></div>
+          <div class="card-fields"><img class="transport-watermark" src="${transportLogo}" alt="Oromia Transport Agency logo"><div class="card-field-block"><span class="card-label">FULL NAME</span><strong class="card-name fit-line">${display(card.nameEn)}</strong><span class="card-alt-name fit-line">${display(card.nameOm)}</span><span class="card-alt-name fit-line">${display(card.nameAm)}</span></div>
           <div class="card-field-block"><span class="card-label">JOB TITLE</span><strong class="card-role fit-line">${display(card.roleEn)}</strong><span class="card-small fit-line">${display(card.roleOm)}</span><span class="card-small fit-line">${display(card.roleAm)}</span></div></div></div>
         <div class="card-bottom"><div class="card-id"><span>EMPLOYEE NO.</span><b>${display(card.employeeId)}</b></div>${card.expiry ? `<div class="card-valid"><span>VALID UNTIL</span><b>${dateLabel(card.expiry)}</b></div>` : ''}</div>
       </div></article>`;

@@ -7,7 +7,7 @@ html = (root / "index.html").read_text(encoding="utf-8")
 css = (root / "styles.css").read_text(encoding="utf-8")
 js = (root / "app.js").read_text(encoding="utf-8")
 
-for filename, mime in (("nooruu-logo.jpg", "image/jpeg"), ("oromia-flag.webp", "image/webp"), ("nooruu-seal.jpg", "image/jpeg")):
+for filename, mime in (("nooruu-logo.jpg", "image/jpeg"), ("oromia-flag.webp", "image/webp"), ("nooruu-seal.jpg", "image/jpeg"), ("oromia-transport-logo.png", "image/png")):
     data = base64.b64encode((root / "assets" / filename).read_bytes()).decode("ascii")
     uri = f"data:{mime};base64,{data}"
     html = html.replace(f"assets/{filename}", uri)
